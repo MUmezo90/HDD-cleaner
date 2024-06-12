@@ -1,0 +1,20 @@
+# Define the username of the account to be removed
+$accountToRemove = "UsernameToRemove"
+
+# Check if the account exists
+$account = Get-WmiObject Win32_UserAccount | Where-Object { $_.Name -eq $accountToRemove }
+if ($account -eq $null) {
+    Write-Host "User account '$accountToRemove' does not exist."
+    exit
+}
+
+# Prompt for confirmation
+$confirmation = Read-Host "Are you sure you want to remove user account '$accountToRemove'? (Y/N)"
+if ($confirmation -ne "Y" -and $confirmation -ne "y") {
+    Write-Host "Operation canceled."
+    exit
+}
+
+# Remove the account
+$account | Remove-WmiObject
+Write-Host "User account '$accountToRemove' has been removed."
